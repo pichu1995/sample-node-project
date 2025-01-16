@@ -1,0 +1,42 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches:
+      - main  # Trigger checks on PRs targeting the main branch
+
+jobs:
+  pr-checks:
+    name: Run Code Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Specify the Node.js version your project uses
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Run linting (e.g., ESLint)
+      - name: Run ESLint
+        run: npm run lint
+        env:
+          CI: true
+
+      # Step 5: Run tests
+      - name: Run tests
+        run: npm test
+        env:
+          CI: true
+
+      # Optional: Step 6: Check formatting (e.g., Prettier)
+      - name: Check Prettier formatting
+        run: npm run prettier-check
